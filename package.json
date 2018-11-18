@@ -1,6 +1,6 @@
 {
   "name": "wood-query",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/jlego/wood-query#readme",
   "dependencies": {
-    "wood-util": "^1.0.3"
+    "wood-util": "^1.0.5"
   }
 }
