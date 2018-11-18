@@ -6,8 +6,10 @@
 const Query = require('./src/query');
 
 module.exports = (app, config = {}) => {
-  app.Query(req = {}) {
-    return Query.getQuery(req);
+  if(app){
+    app.Query = function(req = {}) {
+      return Query.getQuery(req);
+    }
   }
-  return app;
+  return Query;
 }
