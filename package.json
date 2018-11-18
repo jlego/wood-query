@@ -1,0 +1,25 @@
+{
+  "name": "wood-query",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://jlego@github.com/jlego/wood-query.git"
+  },
+  "keywords": [
+    "wood-query"
+  ],
+  "author": "jlego",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jlego/wood-query/issues"
+  },
+  "homepage": "https://github.com/jlego/wood-query#readme",
+  "dependencies": {
+    "wood-util": "^1.0.1"
+  }
+}
