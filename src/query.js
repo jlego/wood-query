@@ -1,6 +1,6 @@
 // 查询对象类
 // by YuRonghui 2018-2-6
-const { getParams, isEmpty } = require('wood-util')();
+const { Util } = require('wood-util')();
 
 class Query {
   constructor(params = {}) {
@@ -21,7 +21,7 @@ class Query {
     };
   }
   where(params = {}) {
-    if(!isEmpty(params)){
+    if(!Util.isEmpty(params)){
       let obj = {};
       for (let key in params) {
         if(key === 'limit') this.limit(params[key]);
@@ -175,7 +175,7 @@ class Query {
     return this.data;
   }
   static getQuery(req = {}) {
-    let where = {}, body = getParams(req);
+    let where = {}, body = Util.getParams(req);
     if(body && body.data) where = body.data.where || {};
     let query = new Query({ where });
     if(req) query.req = req;

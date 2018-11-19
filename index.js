@@ -5,11 +5,10 @@
  */
 const Query = require('./src/query');
 
-module.exports = (app, config = {}) => {
-  if(app){
-    app.Query = function(req = {}) {
-      return Query.getQuery(req);
-    }
+module.exports = (app = {}, config = {}) => {
+  app.Query = function(req = {}) {
+    return Query.getQuery(req);
   }
-  return Query;
+  if(app.addAppProp) app.addAppProp('Query', app.Query);
+  return app;
 }
