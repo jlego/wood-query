@@ -176,10 +176,7 @@ class Query {
     return this.data;
   }
   static getQuery(opts = {}) {
-    let body = Util.getParams(req);
-    if(body && body.data) opts = body.data;
-    let query = new Query(opts);
-    return query;
+    return new Query(opts);
   }
 }
 
