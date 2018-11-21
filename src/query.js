@@ -3,31 +3,27 @@
 const { Util } = require('wood-util')();
 
 class Query {
-  constructor(params = {}) {
+  constructor({select, sort, skip, limit, aggregate, largepage, where, ...other}) {
     this._isQuery = true;
-    if(!params.where) params = { where: params };
     this.data = { //查询条件
-      where: {},
-      select: {
-        _id: 0
-      },
-      sort: {
-        rowid: -1
-      },
+      where: where || {},
+      select: {},
+      sort: {},
       skip: 0,
       limit: 0,
-      aggregate: [],
-      ...params
+      aggregate: aggregate || []
     };
+    if(select) this.select(select);
+    if(sort) this.sort(sort);
+    if(skip) this.skip(skip);
+    if(limit) this.limit(limit);
+    if(where) this.where(where);
+    if(other) this.where(other);
   }
   where(params = {}) {
     if(!Util.isEmpty(params)){
       let obj = {};
       for (let key in params) {
-        if(key === 'limit') this.limit(params[key]);
-        if(key === 'sort') this.sort(params[key]);
-        if(key === 'select') this.select(params[key]);
-        if(['largepage', 'page', 'limit', 'sort', 'where'].includes(key)) continue;
         if (Array.isArray(params[key])) {
           obj[key] = {
             $in: params[key]
