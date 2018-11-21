@@ -26,6 +26,7 @@ class Query {
       for (let key in params) {
         if(key === 'limit') this.limit(params[key]);
         if(key === 'sort') this.sort(params[key]);
+        if(key === 'select') this.select(params[key]);
         if(['largepage', 'page', 'limit', 'sort', 'where'].includes(key)) continue;
         if (Array.isArray(params[key])) {
           obj[key] = {
@@ -174,11 +175,10 @@ class Query {
   toJSON() {
     return this.data;
   }
-  static getQuery(req = {}) {
-    let where = {}, body = Util.getParams(req);
-    if(body && body.data) where = body.data.where || {};
-    let query = new Query({ where });
-    if(req) query.req = req;
+  static getQuery(opts = {}) {
+    let body = Util.getParams(req);
+    if(body && body.data) opts = body.data;
+    let query = new Query(opts);
     return query;
   }
 }
