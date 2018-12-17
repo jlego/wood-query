@@ -3,7 +3,7 @@
 const { Util } = require('wood-util')();
 
 class Query {
-  constructor({select, sort, skip, limit, aggregate, largepage, where, ...other}) {
+  constructor({select, sort, skip, limit, aggregate, largepage, page, where, ...other}) {
     this._isQuery = true;
     this.data = { //查询条件
       where: where || {},
