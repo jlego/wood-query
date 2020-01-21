@@ -3,7 +3,7 @@
 const { Util } = require('wood-util')();
 
 class Query {
-  constructor({select, sort, skip, limit, aggregate, largepage, page, where, ...other}) {
+  constructor({ select, sort, skip, limit, aggregate, largepage, page, where, fuzzyQuery, ...other }) {
     this._isQuery = true;
     this.data = { //查询条件
       where: where || {},
@@ -11,17 +11,21 @@ class Query {
       sort: {},
       skip: 0,
       limit: 0,
+      fuzzyQuery: {},
       aggregate: aggregate || []
     };
-    if(select) this.select(select);
-    if(sort) this.sort(sort);
-    if(skip) this.skip(skip);
-    if(limit) this.limit(limit);
-    if(where) this.where(where);
-    if(other) this.where(other);
+    this.page = page;
+    this.largepage = largepage;
+    if (select) this.select(select);
+    if (sort) this.sort(sort);
+    if (skip) this.skip(skip);
+    if (limit) this.limit(limit);
+    if (where) this.where(where);
+    if (other) this.where(other);
+    if (fuzzyQuery) this.fuzzyQuery(fuzzyQuery);
   }
   where(params = {}) {
-    if(!Util.isEmpty(params)){
+    if (!Util.isEmpty(params)) {
       let obj = {};
       for (let key in params) {
         if (Array.isArray(params[key])) {
@@ -29,19 +33,19 @@ class Query {
             $in: params[key]
           };
         } else {
-          if(typeof params[key] == 'object'){
-            if(params[key].like){ // 模糊查询
+          if (typeof params[key] == 'object') {
+            if (params[key].like) { // 模糊查询
               obj[key] = {
                 $regex: params[key].like
               };
-            }else if(params[key].search){ // 全文搜索
+            } else if (params[key].search) { // 全文搜索
               obj['$text'] = {
                 $search: params[key].search
               };
-            }else{
+            } else {
               obj[key] = params[key];
             }
-          }else{
+          } else {
             obj[key] = {
               $eq: params[key]
             };
@@ -49,6 +53,17 @@ class Query {
         }
       }
       Object.assign(this.data.where, obj);
+    }
+    return this;
+  }
+  fuzzyQuery(params = {}) {
+    if (!Util.isEmpty(params)) {
+      let list = Object.keys(params).map(key => {
+        let obj = {};
+        obj[key] = { $regex: params[key] };
+        return obj;
+      })
+      Object.assign(this.data.where, { $or: list });
     }
     return this;
   }
@@ -141,7 +156,7 @@ class Query {
         "$match": this.data.where
       });
     }
-    if (this.data.select) {
+    if (this.data.select && !Util.isEmpty(this.data.select)) {
       this.data.aggregate.push({
         "$project": this.data.select
       });
@@ -161,7 +176,7 @@ class Query {
         "$limit": this.data.limit
       });
     }
-    if (this.data.sort) {
+    if (this.data.sort && !Util.isEmpty(this.data.sort)) {
       this.data.aggregate.push({
         "$sort": this.data.sort
       });
