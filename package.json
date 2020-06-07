@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/jlego/wood-query#readme",
   "dependencies": {
-    "wood-util": "^1.0.5"
+    "wood-util": "^1.0.17"
   }
 }
